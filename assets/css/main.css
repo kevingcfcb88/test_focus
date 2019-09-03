@@ -2,6 +2,17 @@ body {
     background-color: #FFFFFF;
     margin: 10px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 11px;
+    font-size: 18px;
     color: #bbbbbb;
+}
+
+img{
+    max-width: 150px;
+    max-height: 150px;
+    width: 150px;
+    height: 150px;
+}
+
+h2 {
+    display: none;
 }

@@ -12,15 +12,21 @@ $(document).ready(function () {
     function renderUsers() {
         const urlUsers= "https://jsonplaceholder.typicode.com/users";
         ajaxCall(urlUsers, function(json){
-            console.log(json);
             $.each(json, function (id, value) {
                 const urlNameGender = "https://api.genderize.io/?name="+getSingleName(value.name);
-                var sGender = "";
                 ajaxCall(urlNameGender, function(json){
-                    sGender = json.gender;
-                });
-                var sDiv = "<img src='//joeschmoe.io/api/v1/"+sGender+"/random'><div id='"+id+"' class='user'>" + value.name + "</div>";
-                $("#content").append(sDiv);
+                    var sDiv = "<img class='joe' src='//joeschmoe.io/api/v1/"+json.gender+"/random'><div id='"+id+"' class='user'>" + value.name + "</div>";
+                    $("#content").append(sDiv);
+                    const urlPostByUser = "https://jsonplaceholder.typicode.com/posts?userId="+id;
+                    ajaxCall(urlPostByUser, function(jsonPost){
+                        var sPosts = "<ul>";
+                        for (i = 0; i < jsonPost.length; i++){
+                            sPosts += "<li>"+jsonPost[i].title+"</li>";
+                        }
+                        sPosts += "</ul>";
+                        document.getElementById(id).insertAdjacentHTML('beforeend', sPosts);
+                    });
+                });                
             }); 
         });
     }
@@ -46,10 +52,15 @@ $(document).ready(function () {
             })
             // Code to run regardless of success or failure;
             .always(function (xhr, status) {
-                alert("The request is complete!");
+                //alert("The request is complete!");
             });
     }
 
+    /**
+     * Function created to return the first names without titles
+     * sName Full Name
+     * return the First name without titles
+     */
     function getSingleName(sName){
         var aName = sName.split(" ");
         if(aName[0] === "Mr." || aName[0] === "Mrs."){
